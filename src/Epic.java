@@ -4,8 +4,8 @@ import java.util.Objects;
 public class Epic extends Task {
     private ArrayList<Integer> subTaskIds = new ArrayList<>();
 
-    public Epic(String name) {
-        super(name);
+    public Epic(String name, String description, Status status) {
+        super(name, description, status);
     }
 
     public void addSubTaskId(int subTaskId) {
@@ -17,7 +17,11 @@ public class Epic extends Task {
     }
 
     public ArrayList<Integer> getSubTaskIds() {
-        return subTaskIds;
+        return new ArrayList<>(subTaskIds);
+    }
+
+    public void clearSubTaskIds() {
+        subTaskIds.clear();
     }
 
     @Override

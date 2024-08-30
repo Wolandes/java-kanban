@@ -3,15 +3,21 @@ import java.util.Objects;
 public class Task {
     private String name;
     private int id;
-    private String description = "";
-    private Status status = Status.NEW;
+    private String description;
+    private Status status;
 
-    public Task(String name) {
+    public Task(String name, String description, Status status) {
         this.name = name;
+        this.description = description;
+        this.status = status;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
