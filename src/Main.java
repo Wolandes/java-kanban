@@ -9,7 +9,7 @@ import model.Task;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
+       /* TaskManager taskManager = Managers.getDefault();
         Task task = new Task("Что-то","Описание1", Status.NEW);
         taskManager.addTask(task);
         task = new Task("Что-то","Описание2",Status.NEW);
@@ -51,6 +51,6 @@ public class Main {
         taskManager.getTaskInId(7);
         taskManager.getTaskInId(7);
         taskManager.getTaskInId(7);
-        System.out.println(taskManager.getHistory());
+        System.out.println(taskManager.getHistory());*/
     }
 }
