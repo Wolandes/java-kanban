@@ -1,17 +1,25 @@
+package manager;
+import model.Task;
+import model.Epic;
+import model.Subtask;
+import model.Status;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager  {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private ArrayList<Task> historyList = new ArrayList<>();
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, Subtask> subtasks = new HashMap<>();
     private int counterId = 0;
     HistoryManager historyManager;
 
-    public InMemoryTaskManager(HistoryManager historyManager){
-        this.historyManager = historyManager;
+    public InMemoryTaskManager(){
+        this.historyManager = Managers.getDefaultHistory();
     }
+
     //Генерация ID
     private int increaseId() {
         return ++counterId;
@@ -202,7 +210,7 @@ public class InMemoryTaskManager implements TaskManager  {
     }
     //Новый метод getHistory
     @Override
-    public ArrayList<Task> getHistory(){
+    public List<Task> getHistory(){
         return historyManager.getHistory();
     }
 }

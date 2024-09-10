@@ -1,11 +1,16 @@
-import java.util.ArrayList;
+import manager.Managers;
+import manager.TaskManager;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 
 
 public class Main {
 
     public static void main(String[] args) {
-    /*    TaskManager taskManager = Managers.getDefault();
-        Task task = new Task("Что-то","Описание1",Status.NEW);
+        TaskManager taskManager = Managers.getDefault();
+        Task task = new Task("Что-то","Описание1", Status.NEW);
         taskManager.addTask(task);
         task = new Task("Что-то","Описание2",Status.NEW);
         taskManager.addTask(task);
@@ -36,12 +41,16 @@ public class Main {
         taskManager.getTaskInId(12);
         taskManager.getTaskInId(1);
         taskManager.getTaskInId(6);
-        taskManager.getTaskInId(7);
+        taskManager.getTaskInId(7); //10
         taskManager.getEpicInId(8);
         taskManager.getSubTaskInId(9);
         taskManager.getEpicInId(10);
         taskManager.getEpicInId(11);
         taskManager.getTaskInId(12);
-        System.out.println(taskManager.getHistory()); */
+        taskManager.getEpicInId(8);
+        taskManager.getTaskInId(7);
+        taskManager.getTaskInId(7);
+        taskManager.getTaskInId(7);
+        System.out.println(taskManager.getHistory());
     }
 }
