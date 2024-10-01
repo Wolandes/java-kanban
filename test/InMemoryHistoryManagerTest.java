@@ -1,4 +1,3 @@
-package test;
 import manager.HistoryManager;
 import manager.Managers;
 import model.Status;
@@ -48,13 +47,8 @@ public class InMemoryHistoryManagerTest {
         historyManager.remove(2);
         List<Task> history1 = historyManager.getHistory();
         System.out.println();
-//        Task firsTask = history.get(0);
-//        int firstId = firsTask.getId();
-//        Task twoTask = history1.get(0);
-//        int twoId = twoTask.getId();
         assertNotEquals(history1,history, "Они равны");
     }
-    //В этом тесте смотрится что записывается в конце
     @Test void shouldAddInTail(){
         Task task = new Task("name","description",Status.NEW);
         task.setId(1);
