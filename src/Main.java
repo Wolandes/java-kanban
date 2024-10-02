@@ -46,5 +46,12 @@ public class Main {
         for (Task list1 : list2) {
             System.out.println(list1);
         }
+        /*managers.removeAllEpics();
+        managers.removeTaskInId(1);
+        managers.removeAllTasks();
+        managers.removeTaskInId(1);
+        managers.removeAllEpics();
+        managers.removeSubTaskInId(4);
+        managers.removeAllSubTasks();*/
     }
 }
