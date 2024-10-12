@@ -1,4 +1,3 @@
-package test;
 import model.Epic;
 import model.Status;
 import model.Subtask;
@@ -32,7 +31,7 @@ public class EpicTest {
     public void testEpicUpdatesCorrectlyAfterSubTaskChange() {
         Epic epic = new Epic("Эпик 1", "Свойство 1", Status.NEW);
         epic.setId(1);
-        Subtask subTask1 = new Subtask("Подзадача 1", "Свойство 1", Status.NEW , 1);
+        Subtask subTask1 = new Subtask("Подзадача 1", "Свойство 1", Status.NEW, 1);
         subTask1.setId(2);
 
         epic.addSubTaskId(subTask1.getId());
