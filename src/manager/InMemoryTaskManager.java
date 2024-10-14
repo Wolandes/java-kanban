@@ -257,4 +257,14 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
+
+    //Определить counterId
+    protected void setCounterId(int newId) {
+        counterId = newId;
+    }
+
+    //Для проверки записи counterId
+    protected int getCounterId() {
+        return counterId;
+    }
 }
