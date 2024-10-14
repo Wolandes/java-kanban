@@ -19,7 +19,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         SUBTASK
     }
 
-    protected void save() throws ManagerSaveException{
+    protected void save() throws ManagerSaveException {
         try {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write("id,type,name,status,description,epic\n");
@@ -82,7 +82,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             reader.close();
             fr.close();
-        } catch (FileNotFoundException exp){
+        } catch (FileNotFoundException exp) {
             throw new ManagerSaveException("Файл не найден");
         } catch (IOException exp) {
             throw new ManagerSaveException("Ошибка при загрузке файла");
@@ -117,7 +117,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void addTask(Task task)  {
+    public void addTask(Task task) {
         super.addTask(task);
         try {
             save();
@@ -127,7 +127,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void addEpic(Epic epic)  {
+    public void addEpic(Epic epic) {
         super.addEpic(epic);
         try {
             save();
@@ -137,7 +137,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void addSubTask(Subtask subtask)  {
+    public void addSubTask(Subtask subtask) {
         super.addSubTask(subtask);
         try {
             save();
@@ -147,7 +147,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(Task task)  {
+    public void updateTask(Task task) {
         super.updateTask(task);
         try {
             save();
@@ -157,7 +157,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateEpic(Epic epic)  {
+    public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         try {
             save();
@@ -167,7 +167,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateSubTask(Subtask subtask)  {
+    public void updateSubTask(Subtask subtask) {
         super.updateSubTask(subtask);
         try {
             save();
@@ -177,7 +177,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeTaskInId(int id)  {
+    public void removeTaskInId(int id) {
         super.removeTaskInId(id);
         try {
             save();
@@ -187,7 +187,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeEpicInId(int id)  {
+    public void removeEpicInId(int id) {
         super.removeEpicInId(id);
         try {
             save();
@@ -197,7 +197,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeSubTaskInId(int id)  {
+    public void removeSubTaskInId(int id) {
         super.removeSubTaskInId(id);
         try {
             save();
