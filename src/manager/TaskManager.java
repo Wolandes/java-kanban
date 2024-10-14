@@ -17,9 +17,9 @@ public interface TaskManager {
 
     void addTask(Task task);
 
-    void updateTask(Task task);
+    void updateTask(Task task) ;
 
-    void removeTaskInId(int id);
+    void removeTaskInId(int id) ;
 
     //Методы Epic
     List<Epic> getAllEpics();
@@ -30,9 +30,9 @@ public interface TaskManager {
 
     void addEpic(Epic epic);
 
-    void updateEpic(Epic epic);
+    void updateEpic(Epic epic) ;
 
-    void removeEpicInId(int id);
+    void removeEpicInId(int id) ;
 
     //Методы SubTask
     List<Subtask> getAllsubtasks();
@@ -43,7 +43,7 @@ public interface TaskManager {
 
     void addSubTask(Subtask subtask);
 
-    void updateSubTask(Subtask subtask);
+    void updateSubTask(Subtask subtask) ;
 
     void removeSubTaskInId(int id);
 
