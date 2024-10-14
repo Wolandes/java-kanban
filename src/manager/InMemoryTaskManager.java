@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class InMemoryTaskManager implements TaskManager {
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
-    private Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+    protected Map<Integer, Subtask> subtasks = new HashMap<>();
     private int counterId = 0;
     HistoryManager historyManager;
 
@@ -256,5 +256,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    //Определить counterId
+    protected void setCounterId(int newId) {
+        counterId = newId;
+    }
+
+    //Для проверки записи counterId
+    protected int getCounterId() {
+        return counterId;
     }
 }

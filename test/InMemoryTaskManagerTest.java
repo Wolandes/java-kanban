@@ -1,5 +1,4 @@
 import manager.InMemoryTaskManager;
-import manager.Managers;
 import model.Status;
 import model.Task;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +16,14 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void testAddAndFindTasksById() {
+    public void testAddAndFindTasksById()  {
         Task task = new Task("Задача 1", "Свойство 1", Status.NEW);
         taskManager.addTask(task);
         assertEquals(task, taskManager.getTaskInId(task.getId()));
     }
 
     @Test
-    public void testNoConflictBetweenGeneratedAndGivenIds() {
+    public void testNoConflictBetweenGeneratedAndGivenIds()  {
         Task task1 = new Task("Задача 1", "Свойство 1", Status.NEW);
         task1.setId(100);
         taskManager.addTask(task1);
