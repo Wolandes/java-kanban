@@ -45,9 +45,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         sb.append(task.getStatus()).append(",");
         sb.append(task.getDescription()).append(",");
         sb.append(task.getDuration()).append(",");
-        if (task.getStartTime() != null){
+        if (task.getStartTime() != null) {
             sb.append(task.getStartTime()).append(",");
-        } else{
+        } else {
             sb.append("null").append(",");
         }
         if (type.equals("SUBTASK")) {
@@ -108,16 +108,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = value[4];
         Duration duration = Duration.parse(value[5]);
         LocalDateTime startTime = null;
-        if (!value[6].equals("null")){
+        if (!value[6].equals("null")) {
             startTime = LocalDateTime.parse(value[6]);
         }
         switch (taskType) {
             case TASK:
-                Task task = new Task(name, description, status, duration , startTime);
+                Task task = new Task(name, description, status, duration, startTime);
                 task.setId(id);
                 return task;
             case EPIC:
-                Epic epic = new Epic(name, description, status, duration , startTime);
+                Epic epic = new Epic(name, description, status, duration, startTime);
                 epic.setId(id);
                 return epic;
             case SUBTASK:
@@ -229,7 +229,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         File file = new File("tasks.csv");
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
-        Task task1 = new Task("Name1", "Description1", Status.NEW,Duration.ofMinutes(5), LocalDateTime.now());
+        Task task1 = new Task("Name1", "Description1", Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         Task task2 = new Task("Name2", "Description2", Status.NEW);
         Epic epicWithSubtasks = new Epic("Name1", "Description1", Status.NEW);
         int idEpic = 3;
