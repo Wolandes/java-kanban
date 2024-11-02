@@ -8,8 +8,11 @@ import java.util.Objects;
 
 public class Epic extends Task {
     private ArrayList<Integer> subTaskIds = new ArrayList<>();
-    private Duration duration = Duration.ZERO;
-    private LocalDateTime startTime = null;
+    private LocalDateTime endTime = null;
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
     public Epic(String name, String description, Status status) {
         super(name, description, status, Duration.ZERO, null);
@@ -28,14 +31,26 @@ public class Epic extends Task {
     }
 
     public void updateEpicDurationAndTime(List<Subtask> subtasks) {
-        duration = Duration.ZERO;
-        startTime = null;
+        Duration allDuration = Duration.ZERO;
+        LocalDateTime beginStartTime = null;
+        LocalDateTime lastStartTime = null;
+
         for (Subtask subtask : subtasks) {
-            duration = duration.plus(subtask.getDuration());
-            if (startTime == null || (subtask.getStartTime() != null && subtask.getStartTime().isBefore(startTime))) {
-                startTime = subtask.getStartTime();
+            allDuration = allDuration.plus(subtask.getDuration());
+
+            if (beginStartTime == null || (subtask.getStartTime() != null && subtask.getStartTime().isBefore(beginStartTime))) {
+                beginStartTime = subtask.getStartTime();
+            }
+
+            LocalDateTime subtaskEndTime = subtask.getEndTime();
+            if (subtaskEndTime != null && (lastStartTime == null || subtaskEndTime.isAfter(lastStartTime))) {
+                lastStartTime = subtaskEndTime;
             }
         }
+
+        setDuration(allDuration);
+        setStartTime(beginStartTime);
+        this.endTime = lastStartTime;
     }
 
     public void removeSubTaskId(int subTaskId) {
