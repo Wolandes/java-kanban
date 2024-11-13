@@ -4,13 +4,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import model.Epic;
 import model.Subtask;
 import model.Task;
 
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.URI;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,26 +20,13 @@ import com.google.gson.stream.JsonWriter;
 
 public class HttpTaskServer {
 
-    private static final int PORT = 8080;
     private static TaskManager managers = Managers.getDefault();
-    private static Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .setPrettyPrinting()
-            .create();
+    private static Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).registerTypeAdapter(Duration.class, new DurationAdapter()).setPrettyPrinting().create();
     private static String jsonResponse = "";
-    private static HttpServer httpServer;
 
     public static void main(String[] args) throws IOException {
-        httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
-        httpServer.createContext("/tasks", new TaskHandler());
-        httpServer.createContext("/subtasks", new SubTasksHandler());
-        httpServer.createContext("/epics", new EpicsHandler());
-        httpServer.createContext("/history", new HistoryHandler());
-        httpServer.createContext("/prioritized", new PrioritizedHandler());
-
-        httpServer.start();
-
+        HttpServerInitializer httpServerWork = new HttpServerInitializer();
+        httpServerWork.start();
     }
 
     static class TaskHandler implements HttpHandler {
@@ -67,17 +52,18 @@ public class HttpTaskServer {
                             break;
                         }
                     case "POST":
-                        if (lengthPath < 3) {
-                            int code = createTask(httpExchange);
+                        Task task = getFromBodyTask(httpExchange);
+                        if (task.getId() == 0) {
+                            int code = createTask(task);
                             sendResponseHeaders(httpExchange, code);
                         } else {
-                            int code = updateTask(pathArray[2], httpExchange);
+                            int code = updateTask(task);
                             sendResponseHeaders(httpExchange, code);
                             break;
                         }
                         break;
                     case "DELETE":
-                        if (lengthPath > 3) {
+                        if (lengthPath == 3) {
                             int code = deleteTask(pathArray[2]);
                             sendResponseHeaders(httpExchange, code);
                         }
@@ -111,17 +97,18 @@ public class HttpTaskServer {
                             break;
                         }
                     case "POST":
-                        if (lengthPath < 3) {
-                            int code = createSubtask(httpExchange);
+                        Subtask subtask = getFromBodySubtask(httpExchange);
+                        if (subtask.getId() == 0) {
+                            int code = createSubtask(subtask);
                             sendResponseHeaders(httpExchange, code);
                         } else {
-                            int code = updateSubtask(pathArray[2], httpExchange);
+                            int code = updateSubtask(subtask);
                             sendResponseHeaders(httpExchange, code);
                             break;
                         }
                         break;
                     case "DELETE":
-                        if (lengthPath > 3) {
+                        if (lengthPath == 3) {
                             int code = deleteSubtaks(pathArray[2]);
                             sendResponseHeaders(httpExchange, code);
                         }
@@ -162,17 +149,18 @@ public class HttpTaskServer {
                             }
                         }
                     case "POST":
-                        if (lengthPath < 3) {
-                            int code = createEpic(httpExchange);
+                        Epic epic = getFromBodyEpic(httpExchange);
+                        if (epic.getId() == 0) {
+                            int code = createEpic(epic);
                             sendResponseHeaders(httpExchange, code);
                         } else {
-                            int code = updateEpic(pathArray[2], httpExchange);
+                            int code = updateEpic(epic);
                             sendResponseHeaders(httpExchange, code);
                             break;
                         }
                         break;
                     case "DELETE":
-                        if (lengthPath > 3) {
+                        if (lengthPath == 3) {
                             int code = deleteEpic(pathArray[2]);
                             sendResponseHeaders(httpExchange, code);
                         }
@@ -265,21 +253,20 @@ public class HttpTaskServer {
         }
     }
 
-    private static int createTask(HttpExchange httpExchange) {
-        InputStream inputStream = httpExchange.getRequestBody();
-        Task task = gson.fromJson(new InputStreamReader(inputStream), Task.class);
+    private static int createTask(Task task) {
         managers.addTask(task);
-        jsonResponse = gson.toJson("Добавлена задача");
+        List<Task> lastTask = managers.getAllTasks();
+        int id = 0;
+        for (Task task1 : lastTask) {
+            id = task1.getId();
+        }
+        jsonResponse = gson.toJson("Добавлена задача с номером Id: " + id);
         return 201;
     }
 
-    private static int updateTask(String idStr, HttpExchange httpExchange) {
+    private static int updateTask(Task task) {
         try {
-            int id = Integer.parseInt(idStr);
-            Task task = managers.getTaskInId(id);
-            InputStream inputStream = httpExchange.getRequestBody();
-            Task task1 = gson.fromJson(new InputStreamReader(inputStream), Task.class);
-            managers.updateTask(task1);
+            managers.updateTask(task);
             jsonResponse = gson.toJson("Задача обновлена");
             return 201;
         } catch (NullPointerException e) {
@@ -320,21 +307,20 @@ public class HttpTaskServer {
 
     }
 
-    private static int createSubtask(HttpExchange httpExchange) {
-        InputStream inputStream = httpExchange.getRequestBody();
-        Subtask subtask = gson.fromJson(new InputStreamReader(inputStream), Subtask.class);
+    private static int createSubtask(Subtask subtask) {
         managers.addSubTask(subtask);
-        jsonResponse = gson.toJson("Добавлена подзадача");
+        List<Subtask> lastSubtask = managers.getAllsubtasks();
+        int id = 0;
+        for (Subtask subtask1 : lastSubtask) {
+            id = subtask1.getId();
+        }
+        jsonResponse = gson.toJson("Добавлена подзадача с номером Id: " + id);
         return 201;
     }
 
-    private static int updateSubtask(String idStr, HttpExchange httpExchange) {
+    private static int updateSubtask(Subtask subtask) {
         try {
-            int id = Integer.parseInt(idStr);
-            Subtask subtask = managers.getSubTaskInId(id);
-            InputStream inputStream = httpExchange.getRequestBody();
-            Subtask subtask1 = gson.fromJson(new InputStreamReader(inputStream), Subtask.class);
-            managers.updateTask(subtask1);
+            managers.updateTask(subtask);
             jsonResponse = gson.toJson("Подзадача обновлена");
             return 201;
         } catch (NullPointerException e) {
@@ -388,24 +374,22 @@ public class HttpTaskServer {
 
     }
 
-    private static int createEpic(HttpExchange httpExchange) {
-        InputStream inputStream = httpExchange.getRequestBody();
-        Epic epic = gson.fromJson(new InputStreamReader(inputStream), Epic.class);
+    private static int createEpic(Epic epic) {
         managers.addEpic(epic);
-        jsonResponse = gson.toJson("Добавлен эпик");
+        List<Epic> lastEpic = managers.getAllEpics();
+        int id = 0;
+        for (Epic epic1 : lastEpic) {
+            id = epic1.getId();
+        }
+        jsonResponse = gson.toJson("Добавлен эпик с номером Id: " + id);
         return 201;
     }
 
-    private static int updateEpic(String idStr, HttpExchange httpExchange) {
+    private static int updateEpic(Epic epic) {
         try {
-            Integer id = Integer.parseInt(idStr);
-            Epic epic = managers.getEpicInId(id);
-            InputStream inputStream = httpExchange.getRequestBody();
-            Epic epic1 = gson.fromJson(new InputStreamReader(inputStream), Epic.class);
-            managers.updateTask(epic1);
-            jsonResponse = gson.toJson("Эпик обновлена");
+            managers.updateTask(epic);
+            jsonResponse = gson.toJson("Эпик обновлен");
             return 201;
-
         } catch (NullPointerException e) {
             return 404;
         }
@@ -467,32 +451,21 @@ public class HttpTaskServer {
         }
     }
 
-    //Методы для тестов
-    public static Gson getGson() {
-        return new Gson();
+    public static Task getFromBodyTask(HttpExchange httpExchange) {
+        InputStream inputStream = httpExchange.getRequestBody();
+        Task task = gson.fromJson(new InputStreamReader(inputStream), Task.class);
+        return task;
     }
 
-    public void start() throws IOException {
-        httpServer = HttpServer.create(new InetSocketAddress(8080), 0);
-
-        // Пример обработки запросов для /tasks
-        httpServer.createContext("/tasks", new HttpHandler() {
-            @Override
-            public void handle(HttpExchange exchange) throws IOException {
-                if ("POST".equals(exchange.getRequestMethod())) {
-                    InputStream inputStream = exchange.getRequestBody();
-                    Task task = new Gson().fromJson(new InputStreamReader(inputStream), Task.class);
-                    managers.addTask(task);
-                    exchange.sendResponseHeaders(201, 0);
-                    exchange.close();
-                }
-            }
-        });
-        httpServer.start();
-        System.out.println("Server started on port 8080");
+    public static Subtask getFromBodySubtask(HttpExchange httpExchange) {
+        InputStream inputStream = httpExchange.getRequestBody();
+        Subtask subtask = gson.fromJson(new InputStreamReader(inputStream), Subtask.class);
+        return subtask;
     }
 
-    public void stop() {
-        httpServer.stop(0);
+    public static Epic getFromBodyEpic(HttpExchange httpExchange) {
+        InputStream inputStream = httpExchange.getRequestBody();
+        Epic epic = gson.fromJson(new InputStreamReader(inputStream), Epic.class);
+        return epic;
     }
 }
